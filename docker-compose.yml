@@ -1,0 +1,29 @@
+version: '3.8'
+services:
+  backend:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - JWT_SECRET_KEY=dev-jwt-secret-key
+      - MONGODB_URI=mongodb://mongodb:27017/agencypilot
+    depends_on:
+      - mongodb
+    
+  frontend:
+    build:
+      context: ./frontend  
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1
+      
+  mongodb:
+    image: mongo:7
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_DATABASE=agencypilot
